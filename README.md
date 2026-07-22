@@ -61,7 +61,7 @@ cd <your-repo>
 pip install -r requirements.txt
 ```
 
-Download the [dataset from Kaggle](https://www.kaggle.com/datasets/amitabhajoy/bengaluru-house-price-data) and place `Bengaluru_House_Data.csv` in a `data/` folder.
+Download the [dataset](./Bengaluru_House_Data.csv) and place `Bengaluru_House_Data.csv` in a `data/` folder.
 
 **1. Train the model**
 Run `bengaluru_house_price_prediction.ipynb` from top to bottom. This creates `model/lr_reg_model.pickle`.
