@@ -3,8 +3,8 @@ import pandas as pd
 import numpy as np
 import joblib
 
-# 1. Load model (relative path — matches model/ folder created by the notebook)
-model = joblib.load("model/lr_reg_model.pickle")
+# 1. Load model (relative path — file sits at repo root)
+model = joblib.load("lr_reg_model.pickle")
 
 # 2. Extract feature names directly from the trained model
 # (No json file required — guarantees exact column names & order!)
