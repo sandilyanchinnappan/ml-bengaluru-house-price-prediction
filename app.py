@@ -2,9 +2,12 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
+import os
 
-# 1. Load model (relative path — file sits at repo root)
-model = joblib.load("lr_reg_model.pickle")
+# 1. Load model (path resolved relative to this script's location,
+# so it works no matter what the current working directory is)
+MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "lr_reg_model.pickle")
+model = joblib.load(MODEL_PATH)
 
 # 2. Extract feature names directly from the trained model
 # (No json file required — guarantees exact column names & order!)
