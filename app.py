@@ -55,7 +55,7 @@ st.markdown(
     """
 <style>
 	[data-testid="stAppViewContainer"] {
-		background-image: url("https://img.freepik.com/premium-photo/luxurious-homes-upscale-neighborhood-stunning-aerial-view-concept-luxury-real-estate-aerial-photography-upscale-neighborhoods-beautiful-homes-premium-locations_918839-112196.jpg?w=2000");
+		background-image: url("https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=2000&auto=format&fit=crop");
 		background-size: cover;
 		background-position: center;
 	}
