@@ -9,7 +9,13 @@ A machine learning project that predicts house prices in Bengaluru, India, based
 
 ## 📌 Project Overview
 
-This project uses the [Bengaluru House Data](https://www.kaggle.com/datasets/amitabhajoy/bengaluru-house-price-data) dataset from Kaggle. The raw data is messy — mixed units, missing values, inconsistent entries — so most of the work here is cleaning and preparing the data before training a model to predict prices.
+Real estate pricing in a city like Bengaluru can vary wildly from one street to the next, and public listing data tends to be messy — mixed units, missing fields, and inconsistent formatting. The goal of this project was to take a raw, unrefined housing dataset and turn it into a reliable price prediction model, following a proper data science workflow from cleaning to deployment.
+
+This project uses the [Bengaluru House Data](https://www.kaggle.com/datasets/amitabhajoy/bengaluru-house-price-data) dataset from Kaggle, which contains thousands of property listings scraped from real estate platforms across the city, including details like location, size, total square footage, number of bathrooms, and price.
+
+## 🎯 Problem Statement
+
+Given basic property details — square footage, number of bedrooms, number of bathrooms, and location — predict the market price of a house in Bengaluru (in Lakhs). The challenge wasn't really the modeling itself, but getting there: the raw data had inconsistent size formats, sqft values written as ranges or in different units, hundreds of sparsely-represented locations, and clear outliers that would have thrown off any model trained on them directly.
 
 ## 🧰 Tech Stack
 
@@ -21,15 +27,33 @@ This project uses the [Bengaluru House Data](https://www.kaggle.com/datasets/ami
 - **Deployment:** Streamlit
 - **Model Saving:** joblib
 
-## 🧭 Steps Followed
+## 🧭 Data Cleaning & Feature Engineering
 
-1. **Data Cleaning** — dropped unused columns (`society`, `area_type`, `availability`, `balcony`) and removed missing values
-2. **Feature Engineering** — converted `size` into a numeric `Bedroom` count, and cleaned up `total_sqft` values (some were ranges or in different units like Sq. Meter, Acres, etc.)
-3. **Location Grouping** — grouped locations with fewer than 10 listings into a single `others` category
-4. **Outlier Removal** — removed unrealistic listings using price-per-sqft, BHK pricing comparisons, and bathroom counts
-5. **Encoding** — converted location into one-hot encoded columns
-6. **Model Selection** — compared Linear Regression, Lasso, and Decision Tree using GridSearchCV
-7. **Deployment** — built a Streamlit app to serve predictions from the trained model
+The raw dataset needed significant work before it was usable for modeling:
+
+1. **Dropping Unused Columns** — columns like `society`, `area_type`, `availability`, and `balcony` weren't relevant to price prediction and were removed, along with rows containing missing values.
+
+2. **Parsing Bedroom Counts** — the `size` column contained inconsistent text like "2 BHK" or "3 Bedroom." This was parsed into a clean numeric `Bedroom` column.
+
+3. **Cleaning `total_sqft`** — this field was one of the messiest in the dataset. Some entries were plain numbers, others were ranges like "2100-2850," and some used entirely different units like Sq. Meter, Sq. Yards, Acres, or Guntha. Each of these had to be detected and converted into a consistent numeric square footage value.
+
+4. **Grouping Rare Locations** — the dataset contained over a thousand unique location names, many with just one or two listings. To keep the feature space manageable, any location with fewer than 10 listings was grouped into a single `others` category.
+
+5. **Removing Outliers** — three separate outlier-removal passes were applied:
+   - Listings with an unrealistically small square footage per bedroom
+   - Statistical outliers in price-per-square-foot within each location
+   - Properties priced lower than expected for their BHK tier compared to similar listings in the same location (e.g. a 3 BHK priced below the average 2 BHK nearby)
+   - Listings with implausible bathroom counts relative to bedroom count
+
+6. **Encoding** — after cleaning, the `location` column was one-hot encoded so it could be used as input to the regression models.
+
+## 🤖 Modeling Approach
+
+Rather than picking one algorithm and hoping for the best, three regression models were compared using `GridSearchCV` with cross-validation to find the best-performing option and its optimal hyperparameters:
+
+- **Linear Regression**
+- **Lasso Regression**
+- **Decision Tree Regressor**
 
 ## 📊 Results
 
@@ -39,33 +63,8 @@ This project uses the [Bengaluru House Data](https://www.kaggle.com/datasets/ami
 | Lasso | `alpha: 1, selection: random` | 0.8295 |
 | Decision Tree Regressor | `criterion: squared_error, splitter: random` | 0.8164 |
 
-Linear Regression performed best and was used for the final model.
+**Linear Regression performed best**, with an R² score of ~0.86, and was selected as the final model. This means the model explains roughly 86% of the variance in house prices using just square footage, bedroom count, bathroom count, and location — a solid result given how noisy the underlying data was before cleaning.
 
-## 📂 Project Structure
+## 🖥️ Deployment
 
-```
-.
-├── bengaluru_house_price_prediction.ipynb   # Data cleaning + model training
-├── app.py                                    # Streamlit prediction app
-├── requirements.txt
-├── README.md
-├── data/                                     # Bengaluru_House_Data.csv
-└── model/                                    # lr_reg_model.pickle
-```
-
-## 🚀 Getting Started
-
-```bash
-git clone https://github.com/<your-username>/<your-repo>.git
-cd <your-repo>
-pip install -r requirements.txt
-```
-
-Download the [dataset](./Bengaluru_House_Data.csv) and place `Bengaluru_House_Data.csv` in a `data/` folder.
-
-**1. Train the model**
-Run `bengaluru_house_price_prediction.ipynb` from top to bottom. This creates `model/lr_reg_model.pickle`.
-
-**2. Run the app**
-```bash
-streamlit run app.py
+To make the model usable beyond a notebook, it's wrapped in a Streamlit app where a user can input square footage, bathrooms, BHK, and location, and instantly get a predicted price. The app loads the trained model directly and builds the same one-hot encoded feature vector used during training, so predictions stay consistent with what the model actually learned.
