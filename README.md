@@ -2,8 +2,11 @@
 
 A machine learning project that predicts house prices in Bengaluru, India, based on square footage, number of bedrooms, bathrooms, and location. Includes a simple Streamlit web app so anyone can try it out.
 
-**🔗 Live Demo:** [Add your deployed Streamlit link here]
+**🔗 Live Demo:** [https://bengaluru-house-price-prediction-by-sandilyan.streamlit.app/]
+
 ![App preview](app_preview_image.png)
+
+
 **📓 Notebook:** [`bengaluru_house_price_prediction.ipynb`](./bengaluru_house_price_prediction.ipynb)
 
 ---
