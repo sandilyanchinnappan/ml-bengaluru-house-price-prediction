@@ -55,9 +55,25 @@ st.markdown(
     """
 <style>
 	[data-testid="stAppViewContainer"] {
-		background-image: url("https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=2000&auto=format&fit=crop");
+		background-image: url("https://img.freepik.com/premium-photo/luxurious-homes-upscale-neighborhood-stunning-aerial-view-concept-luxury-real-estate-aerial-photography-upscale-neighborhoods-beautiful-homes-premium-locations_918839-112196.jpg?w=2000");
 		background-size: cover;
 		background-position: center;
+	}
+
+	/* Card behind the main content so text stays readable over the photo */
+	[data-testid="stMain"] .block-container {
+		background-color: rgba(0, 0, 0, 0.6);
+		padding: 2.5rem;
+		border-radius: 16px;
+		margin-top: 2rem;
+	}
+
+	/* Sharper contrast on labels and headings */
+	[data-testid="stMain"] label p,
+	[data-testid="stMain"] h1,
+	[data-testid="stMain"] p {
+		color: #ffffff !important;
+		text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 	}
 </style>
 """,
